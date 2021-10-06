@@ -1,0 +1,50 @@
+on:
+  workflow_call:
+    inputs:
+      mkdocs_config_location:
+        required: true
+        type: string
+        default: './website/mkdocs.yml'
+      nojekyll_location:
+        required: true
+        type: string
+        default: './website/docs/.nojekyll'
+    secrets:
+      github_token:
+        required: true  
+        
+jobs:
+
+  deploy-mkdocs:
+  
+    name: Pass input and secrets to my-action
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2.2.2
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install mkdocs
+          python3 -m pip install MarkdownHighlight
+          python3 -m pip install https://codeload.github.com/mkdocs/mkdocs-bootstrap/zip/master
+
+      - name: Build
+        run: |
+          mkdocs build --config-file ${{ inputs.mkdocs_config_location }} 
+          touch ${{ inputs.nojekyll_location }}
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        with:
+          github_token: ${{ secrets.github_token }}
+          publish_dir: ./website/docs
+          publish_branch: gh-pages
+   
