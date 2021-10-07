@@ -3,6 +3,9 @@ name: Reusable mkdocs deploy
 on:
   workflow_call:
     inputs:
+      deploy_repo:
+        required: true
+        type: string
       mkdocs_config_location:
         required: true
         type: string
@@ -50,3 +53,4 @@ jobs:
         with:
           personal_token: ${{ secrets.auth_token }}
           publish_dir: ./website/docs
+          external_repository: ${{ inputs.deploy_repo }}
