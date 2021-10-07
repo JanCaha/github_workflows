@@ -12,7 +12,7 @@ on:
         type: string
         default: './website/docs/.nojekyll'
     secrets:
-      github_token:
+      auth_token:
         required: true  
         
 jobs:
@@ -48,7 +48,5 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3.8.0
         with:
-          github_token: ${{ secrets.github_token }}
+          github_token: ${{ secrets.auth_token }}
           publish_dir: ./website/docs
-          publish_branch: gh-pages
-   
