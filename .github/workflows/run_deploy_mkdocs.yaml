@@ -48,9 +48,17 @@ jobs:
           mkdocs build --config-file ${{ inputs.mkdocs_config_location }} 
           touch ${{ inputs.nojekyll_location }}
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3.8.0
+      #- name: Deploy
+      #  uses: peaceiris/actions-gh-pages@v3.8.0
+      #  with:
+      #    personal_token: ${{ secrets.auth_token }}
+      #    publish_dir: ./website/docs
+      #    external_repository: ${{ inputs.deploy_repo }}
+          
+      - uses: EndBug/add-and-commit@v7.4.0
         with:
-          personal_token: ${{ secrets.auth_token }}
-          publish_dir: ./website/docs
-          external_repository: ${{ inputs.deploy_repo }}
+          add: './website/docs'
+          author_name: github-actions
+          author_email: github-actions@github.com
+          message: "current website update"
+          branch: "gh-pages"
